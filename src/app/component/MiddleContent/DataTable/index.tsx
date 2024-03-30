@@ -190,7 +190,7 @@ function getComparator<Key extends keyof any>(
 // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
 // with exampleArray.slice().sort(exampleComparator)
 function stableSort<T>(
-  array: readonly T[],
+  array:  T[],
   comparator: (a: T, b: T) => number
 ) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
@@ -648,7 +648,7 @@ export default function DataTable() {
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort<Data>(rows, getComparator(order, orderBy)).slice(
+      stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
