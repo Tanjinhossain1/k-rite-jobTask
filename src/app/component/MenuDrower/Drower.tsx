@@ -12,20 +12,27 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
+import RestoreIcon from "@mui/icons-material/RestorePage";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import { Grid } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Collapse, Grid, Paper } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import Diversity2Icon from "@mui/icons-material/Diversity2";
 import CodeIcon from "@mui/icons-material/Code";
 import { useRouter } from "next/navigation";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
-
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddIcon from "@mui/icons-material/Add";
+import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { FolderDesign, FolderProducts, FolderSales } from "@/constants/drawer";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import MiddleContent from "../MiddleContent";
+import { relative } from "path";
+import SearchBar from "../SearchBar";
 
 const drawerWidth = 330;
 
@@ -59,21 +66,36 @@ export default function ResponsiveDrawer(props: Props) {
       setMobileOpen(!mobileOpen);
     }
   };
+  const [open, setOpen] = React.useState(false);
+  const [salesOpen, setSalesOpen] = React.useState(false);
+  const [designOpen, setDesignOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  const SalesHandleClick = () => {
+    setSalesOpen(!salesOpen);
+  };
+  const DesignHandleClick = () => {
+    setDesignOpen(!designOpen);
+  };
+
   const topDrawerList = [
     {
       title: "Design Team",
       icon: <DesignServicesIcon sx={{ fontWeight: 600, color: "black" }} />,
-      route: "/designTeam", 
+      route: "/designTeam",
     },
     {
       title: "Marketing Team",
       icon: <Diversity2Icon sx={{ fontWeight: 600, color: "black" }} />,
-      route: "/marketingTeam", 
+      route: "/marketingTeam",
     },
     {
       title: "Development Team",
       icon: <CodeIcon sx={{ fontWeight: 600, color: "black" }} />,
-      route: "/developmentTeam", 
+      route: "/developmentTeam",
     },
   ];
   const drawer = (
@@ -117,6 +139,7 @@ export default function ResponsiveDrawer(props: Props) {
             <ListItem key={index} disablePadding>
               <ListItemButton
                 onClick={() => {
+                  // this is for select the option and focus logic and save in local storage
                   if (text.title === "Design Team") {
                     localStorage.setItem(`Design Team`, "true");
                     localStorage.removeItem(`Marketing Team`);
@@ -139,7 +162,10 @@ export default function ResponsiveDrawer(props: Props) {
                       : "none",
                   m: 0.5,
                   borderRadius: "10px",
-                  bgcolor: getTeamTabSelect && getTeamTabSelect === "true" ? "#f5f5f5" : "",
+                  bgcolor:
+                    getTeamTabSelect && getTeamTabSelect === "true"
+                      ? "#f5f5f5"
+                      : "",
                 }}
               >
                 <>
@@ -172,19 +198,202 @@ export default function ResponsiveDrawer(props: Props) {
           </ListItemButton>
         </ListItem>
       </List>
+      <List>
+        {["Folders"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton sx={{ m: 0, p: 0, pl: 2, pr: 2 }}>
+              <ListItemText primary={text} />
+              <ListItemIcon sx={{ textAlign: "end", ml: 3 }}>
+                <AddIcon sx={{ ml: 5 }} />
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <ListItemButton
+        sx={{ bgcolor: open ? "lightGray" : "" }}
+        onClick={handleClick}
+      >
+        <ListItemIcon>
+          <FolderOpenIcon />
+        </ListItemIcon>
+        <ListItemText primary="Product" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+
+      <Collapse
+        sx={{ ml: 5, borderLeft: "2px solid lightGray", mb: 1 }}
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
+        <List component="div" disablePadding>
+          {FolderProducts.map((value, index) => {
+            return (
+              <ListItemButton
+                key={index}
+                sx={{ p: 0, pl: 4, m: 0, fontWeight: 600 }}
+              >
+                <ListItemText
+                  sx={{ color: "#525151" }}
+                  primary={<b>{value.title}</b>}
+                />
+              </ListItemButton>
+            );
+          })}
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <AddCircleOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Add new sub"} />
+          </ListItemButton>
+        </List>
+      </Collapse>
+
+      <Divider />
+      <ListItemButton
+        sx={{ bgcolor: salesOpen ? "lightGray" : "" }}
+        onClick={SalesHandleClick}
+      >
+        <ListItemIcon>
+          <FolderOpenIcon />
+        </ListItemIcon>
+        <ListItemText primary="Sales" />
+        {salesOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+
+      <Collapse
+        sx={{ ml: 5, borderLeft: "2px solid lightGray", mb: 1 }}
+        in={salesOpen}
+        timeout="auto"
+        unmountOnExit
+      >
+        <List component="div" disablePadding>
+          {FolderSales.map((value, index) => {
+            return (
+              <ListItemButton
+                key={index}
+                sx={{ p: 0, pl: 4, m: 0, fontWeight: 600 }}
+              >
+                <ListItemText
+                  sx={{ color: "#525151" }}
+                  primary={<b>{value.title}</b>}
+                />
+              </ListItemButton>
+            );
+          })}
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <AddCircleOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Add new sub"} />
+          </ListItemButton>
+        </List>
+      </Collapse>
+      <Divider />
+      <ListItemButton
+        sx={{ bgcolor: salesOpen ? "lightGray" : "" }}
+        onClick={DesignHandleClick}
+      >
+        <ListItemIcon>
+          <FolderOpenIcon />
+        </ListItemIcon>
+        <ListItemText primary="Design" />
+        {designOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+
+      <Collapse
+        sx={{ ml: 5, borderLeft: "2px solid lightGray", mb: 1 }}
+        in={designOpen}
+        timeout="auto"
+        unmountOnExit
+      >
+        <List component="div" disablePadding>
+          {FolderDesign.map((value, index) => {
+            return (
+              <ListItemButton
+                key={index}
+                sx={{ p: 0, pl: 4, m: 0, fontWeight: 600 }}
+              >
+                <ListItemText
+                  sx={{ color: "#525151" }}
+                  primary={<b>{value.title}</b>}
+                />
+              </ListItemButton>
+            );
+          })}
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <AddCircleOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Add new sub"} />
+          </ListItemButton>
+        </List>
+      </Collapse>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {["Office", "Legal"].map((text, index) => (
+          <ListItem key={index} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <FolderOpenIcon />
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+      <Grid sx={{ mt: 15 }} container>
+        <Grid xs={0.7}></Grid>
+        <Grid xs={1}>
+          <PersonAddAltIcon />
+        </Grid>
+        <Grid xs={0.3}></Grid>
+        <Grid xs={7}>
+          <Typography sx={{ fontWeight: 600 }}>Invite Teammates</Typography>
+        </Grid>
+        <Grid xs={3}></Grid>
+
+        <Grid xs={0.75}></Grid>
+        <Grid sx={{ mt: 1 }} xs={1.1}>
+          <HelpOutlineIcon />
+        </Grid>
+        <Grid xs={0.3}></Grid>
+        <Grid sx={{ mt: 1 }} xs={8}>
+          <Typography sx={{ fontWeight: 600 }}>Help and First steps</Typography>
+        </Grid>
+        <Grid xs={1.8}></Grid>
+
+        <Grid container>
+          <Grid xs={0.6}></Grid>
+          <Grid
+            sx={{
+              mt: 1,
+              bgcolor: "#ebebeb",
+              p: 1.5,
+              borderTopLeftRadius: "10px",
+              borderBottomLeftRadius: "10px",
+            }}
+            xs={1.3}
+          >
+            <Typography>7</Typography>
+          </Grid>
+          <Grid sx={{ bgcolor: "#ebebeb", mt: 1, pt: 1.5 }} xs={0.3}></Grid>
+          <Grid
+            sx={{
+              mt: 1,
+              bgcolor: "#ebebeb",
+              pt: 1.5,
+              borderTopRightRadius: "10px",
+              borderBottomRightRadius: "10px",
+            }}
+            xs={8}
+          >
+            <Typography sx={{ fontWeight: 600 }}>Days Left on Trial</Typography>
+          </Grid>
+          <Grid xs={4}></Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 
@@ -193,15 +402,20 @@ export default function ResponsiveDrawer(props: Props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", position: "relative" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(99% - ${drawerWidth}px)` },
+          width: { sm: `calc(97% - ${drawerWidth}px)` },
+          // m:4,
           ml: { sm: `${drawerWidth}px` },
+          mt: { sm: `${10}px` },
+          mr: { sm: `${30}px` },
           color: "black",
           bgcolor: "white",
+          border: "1px solid lightGray",
+          borderRadius: "15px",
         }}
       >
         <Toolbar>
@@ -214,11 +428,20 @@ export default function ResponsiveDrawer(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography> */}
+          <Grid alignItems="center" container>
+            <Grid xs={2} md={2}>
+              <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+                Products
+              </Typography>
+            </Grid>
+            <Grid xs={2} lg={6}></Grid>
+            <Grid xs={8} lg={4}>
+              <SearchBar />
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -271,9 +494,11 @@ export default function ResponsiveDrawer(props: Props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          color: "black",
         }}
       >
-        {props.children}
+        <MiddleContent />
+         
       </Box>
     </Box>
   );
