@@ -134,7 +134,11 @@ export default function ResponsiveDrawer(props: Props) {
         }}
       >
         {topDrawerList.map((text, index) => {
-          const getTeamTabSelect = localStorage.getItem(`${text.title}`);
+          let getTeamTabSelect
+          if (typeof window !== 'undefined') {
+          const getTeamTab = localStorage.getItem(`${text.title}`);
+          getTeamTabSelect = getTeamTab
+        }
           return (
             <ListItem key={index} disablePadding>
               <ListItemButton
