@@ -29,25 +29,26 @@ import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import { jsx } from "@emotion/react";
 import { deepOrange, deepPurple } from "@mui/material/colors";
+import ReactDOMServer from 'react-dom/server';
 
 interface Data {
   id: number;
   brand: string;
   description: string;
-  members: JSX.Element;
-  categories: JSX.Element;
+  members: any;
+  categories: any;
   tags: string;
-  nextMeeting: JSX.Element;
+  nextMeeting: any;
 }
 
 function createData(
   id: number,
   brand: string,
   description: string,
-  members: JSX.Element,
-  categories: JSX.Element,
+  members: any,
+  categories: any,
   tags: string,
-  nextMeeting: JSX.Element
+  nextMeeting: any
 ): Data {
   return {
     id,
@@ -647,7 +648,7 @@ export default function DataTable() {
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows as any, getComparator(order, orderBy)).slice(
+      stableSort<Data>(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
@@ -674,7 +675,7 @@ export default function DataTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {visibleRows.map((row:any, index) => {
+              {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
