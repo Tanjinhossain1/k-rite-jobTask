@@ -60,7 +60,7 @@ function createData(
   };
 }
 
-const rows = [
+const rows:Data[] = [
   createData(
     1,
     "Wfx",
@@ -647,7 +647,7 @@ export default function DataTable() {
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(rows as any, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
@@ -674,7 +674,7 @@ export default function DataTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {visibleRows.map((row:any, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
