@@ -18,7 +18,6 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { Avatar, Button, Chip, Divider, Fade, Grid, Menu, MenuItem, Stack } from "@mui/material";
 import GridOnIcon from "@mui/icons-material/GridOn";
@@ -27,9 +26,7 @@ import SortIcon from "@mui/icons-material/Sort";
 import TuneIcon from "@mui/icons-material/Tune";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
-import { jsx } from "@emotion/react";
 import { deepOrange, deepPurple } from "@mui/material/colors";
-import ReactDOMServer from 'react-dom/server';
 
 interface Data {
   id: number;
@@ -675,7 +672,7 @@ export default function DataTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {visibleRows.map((row:Data, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
