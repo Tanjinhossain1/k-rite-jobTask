@@ -603,6 +603,7 @@ export default function DataTable() {
     }
     setSelected([]);
   };
+  const [brands,setBrands] = React.useState("")
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
@@ -652,7 +653,7 @@ export default function DataTable() {
       ),
     [order, orderBy, page, rowsPerPage]
   );
-
+  
   return (
     <Box sx={{ width: "100%" }}>
       <Paper elevation={2} sx={{ width: "100%", mb: 2 }}>

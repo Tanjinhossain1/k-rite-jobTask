@@ -80,7 +80,7 @@ export default function ResponsiveDrawer(props: Props) {
   const DesignHandleClick = () => {
     setDesignOpen(!designOpen);
   };
-
+  // top left drawer list
   const topDrawerList = [
     {
       title: "Design Team",
@@ -98,6 +98,7 @@ export default function ResponsiveDrawer(props: Props) {
       route: "/developmentTeam",
     },
   ];
+  // left drawer 
   const drawer = (
     <div>
       <Toolbar>
@@ -123,8 +124,7 @@ export default function ResponsiveDrawer(props: Props) {
           </Grid>
         </Grid>
       </Toolbar>
-
-      {/* <Divider /> */}
+ 
       <List
         sx={{
           border: "1px solid lightGray",
